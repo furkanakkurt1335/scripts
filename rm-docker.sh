@@ -1,19 +1,23 @@
-echo Removing all containers...
+echo "Removing all containers..."
 containers=$(docker ps -aq)
 if [ -z "$containers" ]; then
-  echo No containers to remove.
+  echo "No containers to remove."
 else
-  docker rm -f $(docker ps -aq) # remove all containers
-  echo Removed all containers.
+  docker rm -f $containers  # remove all containers
+  echo "Removed all containers."
 fi
 
-echo Removing all images...
+echo "Removing all images..."
 images=$(docker images -q)
 if [ -z "$images" ]; then
-  echo No images to remove.
+  echo "No images to remove."
 else
-  docker rmi -f $(docker images -q) # remove all images
-  echo Removed all images.
+  docker rmi -f $images  # remove all images
+  echo "Removed all images."
 fi
-docker volume ls -q | xargs docker volume rm # delete all volumes
-docker network prune -f # prune networks
+
+echo "Removing all volumes..."
+docker volume ls -q | xargs -r docker volume rm  # delete all volumes
+
+echo "Pruning networks..."
+docker network prune -f  # prune unused networks
