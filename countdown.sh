@@ -130,15 +130,17 @@ calculate_countdown() {
     elif [ ${#output_parts[@]} -eq 1 ]; then
         echo "${output_parts[1]}"
     else
-        local last_part="${output_parts[-1]}"
-        unset 'output_parts[-1]'
-        if [ ${#output_parts[@]} -gt 0 ]; then
-            local joined=$(printf "%s, " "${output_parts[@]}")
-            joined="${joined%, }"  # Remove trailing comma and space
-            echo "${joined} and ${last_part}"
-        else
-            echo "${last_part}"
-        fi
+        local result=""
+        for ((i=1; i<=${#output_parts[@]}; i++)); do
+            if [ $i -eq 1 ]; then
+                result="${output_parts[i]}"
+            elif [ $i -eq ${#output_parts[@]} ]; then
+                result="${result} and ${output_parts[i]}"
+            else
+                result="${result}, ${output_parts[i]}"
+            fi
+        done
+        echo "${result}"
     fi
     
     echo "================================================"
